@@ -10,24 +10,28 @@ public class pathAudioController : MonoBehaviour
     public AudioSource audio;
     public float timer = 6f;
 
+    //image
+    private SpriteRenderer sprite;
     //public AudioClip clock;
     // Start is called before the first frame update
     void Start()
     {
+        sprite = GetComponent<SpriteRenderer>();
         audio = GetComponent<AudioSource>();
-        StartCoroutine(LerpFunction(.5f, 5));
+        audio.volume = 0f;
+        StartCoroutine(LerpFunction(1f, 10));
     }
 
     // Update is called once per frame
     void Update()
     {
-        timer -= Time.deltaTime;
-        Debug.Log("heartbeat" + timer);
+        //timer -= Time.deltaTime;
+        //Debug.Log("heartbeat" + timer);
 
-        if (Input.anyKeyDown)
-        {
-            audio.Stop();
-        }
+        // if (Input.anyKeyDown)
+        // {
+        //     audio.Stop();
+        // }
     }
 
     IEnumerator LerpFunction(float endValue, float duration)
@@ -36,7 +40,9 @@ public class pathAudioController : MonoBehaviour
         float startValue = audio.volume;
         while (time < duration)
         {
+            audio.pitch = Mathf.Lerp(startValue, endValue, time / duration);
             audio.volume = Mathf.Lerp(startValue, endValue, time / duration);
+            sprite.transform.localScale = Vector3.Lerp(sprite.transform.localScale, sprite.transform.localScale*10f, time / duration);
             time += Time.deltaTime;
             yield return null;
         }
