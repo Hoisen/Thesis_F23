@@ -43,11 +43,17 @@ public class playerMovement : MonoBehaviour
     
     //camera zoom in
     [SerializeField] public Camera cam;
-    public float defaultFov = 90;
+    public float defaultFov = 60;
     public float zoomDuration = 2;
     public float zoomMultiplier = 2;
     
-    
+    //test hitCube shader plzplzplz find a way to apply the shader to full screen
+    public GameObject testShadowQuad;
+    //test audio
+    public GameObject testAudio01;
+    public GameObject testAudio02;
+    public GameObject testAudio03;
+    public GameObject testAmbientBGAudio;
     //CallFunction
     //private scenecolorController bgChange;
     
@@ -132,11 +138,58 @@ public class playerMovement : MonoBehaviour
     }
     private void OnCollisionEnter(Collision collision)
     {
-
     }
 
     private void OnTriggerEnter(Collider other)
     {
 
+        
+    }
+
+    void OnTriggerStay(Collider col)
+    {
+        bool shadowHitted = false;
+        bool shadowTestStay = false;
+        bool stayOnly = false;
+        if (col.tag == "testShadow" && Input.GetKey(KeyCode.E))
+        {
+            testShadowQuad.SetActive(true);
+            shadowHitted = true;
+            shadowTestStay = true;
+        }
+        //stayOnly
+        else if(col.tag == "testShadow")
+        {
+            stayOnly = true;
+            Debug.Log("StayOnly");
+            //add mumbling audio
+        }
+        else
+        {
+            testShadowQuad.SetActive(false);
+            shadowHitted = false;
+            testAudio01.SetActive(false);
+            testAudio02.SetActive(false);
+            testAudio03.SetActive(false);
+        }
+
+        //stay and pressing E
+        if(shadowTestStay)
+        {
+            Debug.Log("Stay + Press E");
+            testAudio01.SetActive(true);
+            testAudio02.SetActive(true);
+            testAudio03.SetActive(true);
+            GameData.touchedShadow = true;
+        }
+
+
+        
+    }
+
+    void OnTriggerExit(Collider col)
+    {
+        testShadowQuad.SetActive(false);
+        GameData.touchedShadow = false;
     }
 }
